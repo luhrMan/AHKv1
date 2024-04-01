@@ -78,14 +78,27 @@ Gui, Add, Button, gButtonCheckTradeItems, Check Trade Items
 
 Gui, Show
 return
-;------------------Hotkeys
+;------------------------------------------------------------------------------------------------------Hotkeys
 *ESC::ExitApp
 
 #IfWinActive ahk_exe DungeonCrawler.exe
-+s:: ;shift + s
-;function that will sell an item the player has equipped that is currently under the mouse cursor
+!s Up:: ; alt + s
+  SellEquippedItem(){
+    MouseGetPos, firstX, firstY
+    Click, %firstX%, %firstY%, Right
+    Sleep 100
+    X := SCREEN_SEARCH_COORDINATES.PLAYER_INVENTORY_MERCHANT.1 + 25
+    Y := SCREEN_SEARCH_COORDINATES.PLAYER_INVENTORY_MERCHANT.2 + 25
+    Click, %X%, %Y%, Left
+    Sleep 200
+    X := BUTTON_MAKE_DEAL.X
+    Y := BUTTON_MAKE_DEAL.Y
+    Click, %X%, %Y%, Left
+    MouseMove, %firstX%, %firstY%
+    return
+  }
 
-
+;------------------------------------------------------------------------------------------------------Functions
 CheckActiveWindow(){
   if (WinExist("Dark and Darker"))
   {

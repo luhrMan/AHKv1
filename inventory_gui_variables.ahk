@@ -61,10 +61,10 @@ for _, object in colorsToIgnoreCollection
     global colorsToIgnore .= object
     ;0x1c2a35-0x1c2b36-0x1d2b36-0x1d2c37$
 }
-global GOLD_BAG_COLLECTION := {STASH_ANY_GOLD_BAG := "|<>##0" colorsToIgnore A_ScriptDir "\images\STASH_ANY_GOLD_BAG.png"
-                            , STASH_EMPTY_GOLD_BAG := "|<>##0" colorsToIgnore A_ScriptDir "\images\STASH_EMPTY_GOLD_BAG.png"
-                            , STASH_FULL_GOLD_BAG := "|<>##0" colorsToIgnore A_ScriptDir "\images\STASH_FULL_GOLD_BAG.png"
-                            , MERCHANT_EMPTY_GOLD_BAG := "|<>##0" colorsToIgnore A_ScriptDir "\images\MERCHANT_ANY_GOLD_BAG.png"
+global GOLD_BAG_COLLECTION := {STASH_ANY_GOLD_BAG : "|<>##0" colorsToIgnore A_ScriptDir "\images\STASH_ANY_GOLD_BAG.png"
+                            , STASH_EMPTY_GOLD_BAG : "|<>##0" colorsToIgnore A_ScriptDir "\images\STASH_EMPTY_GOLD_BAG.png"
+                            , STASH_FULL_GOLD_BAG : "|<>##0" colorsToIgnore A_ScriptDir "\images\STASH_FULL_GOLD_BAG.png"
+                            , MERCHANT_EMPTY_GOLD_BAG : "|<>##0" colorsToIgnore A_ScriptDir "\images\MERCHANT_ANY_GOLD_BAG.png"
                             , ""}
 
 ;-------------Collectibles

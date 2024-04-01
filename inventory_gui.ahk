@@ -4,7 +4,6 @@
 #Include %A_ScriptDir%\node_modules
 #Include graphicsearch.ahk\export.ahk
 
-
 #SingleInstance Force
 SetMouseDelay 0
 oGraphicSearch := new graphicsearch()
@@ -86,22 +85,8 @@ CheckActiveWindow(){
   if (WinExist("Dark and Darker"))
   {
     WinActivate
-    ;WinWaitActive
+    WinWaitActive
   }
-  return
-}
-
-BuyObject(amount, merchant, item){
-  local searchCoords := screenCoords
-  SetMouseDelay 4
-  GraphicSearchAndClick(MerchantsButtonQuery, topMenuBarCoords, "Left", false)
-  GraphicSearchAndClick(merchant, searchCoords, "Left", false)
-  GraphicSearchAndClick(item, MerchantBuyCoords, "Left", false)
-  Loop %amount%{
-    GraphicSearchAndClick(FillButtonQuery, searchCoords, "Left", false)
-    GraphicSearchAndClick(DealButtonQuery, searchCoords, "Left", false)
-  }
-  GraphicSearchAndClick(BackButtonQuery, searchCoords, "Left", false)
   return
 }
 
@@ -131,23 +116,47 @@ GraphicSearchAndClick(itemQuery, searchCoords, mouseBtn, shiftDown:=false, maxCl
   return
 }
 
-StashCheck(itemQuery, amount){
-  SetMouseDelay 3
-  GraphicSearchAndClick(StashButtonQuery, topMenuBarCoords, "Left", false)
-  foundObj := GraphicSearchAndClick(itemQuery, stashSearchCoords, "Right", true, amount)
-
-  if (foundObj.Count() > amount)
-    return %amount%
-  if (foundObj.Count() = 0)
-    return 0
-
-  found := (amount-foundObj.Count())
-  return found
+BuyObject(item, merchant, amount){
+  SetMouseDelay 2
+  GraphicSearchAndClick(MerchantsButtonQuery, TOP_MENU, "Left", false)
+  Sleep 100
+  GraphicSearchAndClick(merchant, WHOLE_SCREEN, "Left", false)
+  Sleep 100
+  GraphicSearchAndClick(item, MERCHANT_INVENTORY, "Left", false)
+  Sleep 100
+  FillX:= BUTTON_FILL_ALL_IN_STASH.X, FillY:= BUTTON_FILL_ALL_IN_STASH.Y
+  DealX := BUTTON_MAKE_DEAL.X, DealY := BUTTON_MAKE_DEAL.Y
+  Loop %amount%
+  {
+    ;need to improve this, pretty slow right now
+    ;GraphicSearchAndClick(FillButtonQuery, SCREEN_COORDINATES.FILL_AND_DEAL, "Left", false)
+    Click, %FillX%, %FillY%, Left
+    Sleep 100
+    Click, %DealX%, %DealY%, Left
+    Sleep 100
+  }
+  GraphicSearchAndClick(BackButtonQuery, topMenuBarCoord, "Left", false)
+  return
 }
 
+CheckStashForItem(itemQuery, amount){
+  SetMouseDelay 3
+  GraphicSearchAndClick(StashButtonQuery, TOP_MENU, "Left", false)
+  Sleep 100
+  foundObj := GraphicSearchAndClick(itemQuery, STASH_INVENTORY, "Right", true, amount)
+
+  if !foundObj
+    return 0
+  else if (foundObj.Count() >= %amount%)
+    return %amount%
+  else
+    return (%amount%-foundObj.Count())
+  return
+}
+/* 
 StashOrBuy(itemQuery, amount){
   SetMouseDelay 5
-  amountFound := StashCheck(itemQuery.2, amount)
+  amountFound := CheckStashForItem(itemQuery.2, amount)
   if (amountFound != amount)
   {
     buyAmount := (amount - amountFound)
@@ -155,13 +164,13 @@ StashOrBuy(itemQuery, amount){
   }
   return
 }
-
+*/
 ClearNotifications(){
   SetMouseDelay 5
-  GraphicSearchAndClick(MerchantsButtonQuery, topMenuBarCoords, "Left", false, 1)
+  GraphicSearchAndClick(MerchantsButtonQuery, TOP_MENU, "Left", false, 1)
   Loop
   {
-    merchantNotificationsObj := GraphicSearchAndClick(MerchantNotificationQuery, screenCoords, "Left", false, 0)
+    merchantNotificationsObj := GraphicSearchAndClick(MerchantNotificationQuery, WHOLE_SCREEN, "Left", false, 0)
   } 
   Until merchantNotificationObj || A_Index = 5
 
@@ -169,13 +178,13 @@ ClearNotifications(){
     X := object.x, Y := object.y
     Click, %X%, %Y%, "Left"
     Sleep 200
-    GraphicSearchAndClick(QuestsButtonQuery, screenCoords, "Left", false)
-    questNotificationAmount := GraphicSearchAndClick(QuestNotificationQuery, MerchantBuyCoords, "Left", false, 0)
+    GraphicSearchAndClick(QuestsButtonQuery, WHOLE_SCREEN, "Left", false)
+    questNotificationAmount := GraphicSearchAndClick(QuestNotificationQuery, MERCHANT_INVENTORY, "Left", false, 0)
   
     for _, object in questNotificationAmount{
       X := object.x, Y := object.y
       Click, %X%, %Y%, "Left"
-      GraphicSearchAndClick(AcceptButtonQuery, screenCoords, "Left", false, 1)
+      GraphicSearchAndClick(AcceptButtonQuery, WHOLE_SCREEN, "Left", false, 1)
     }
     GraphicSearchAndClick(BackButtonQuery, topMenuBarCoord, "Left", false, 1)
   }
@@ -187,16 +196,16 @@ ButtonMoveGold:
 CheckActiveWindow()
 SetMouseDelay 1
 GuiControlGet, ImageRecognitionArea
-searchCoords := ImageRecognitionArea = "Inventory" ? inventorySearchCoords : stashSearchCoords
+searchCoords := ImageRecognitionArea = "Inventory" ? PLAYER_INVENTORY_STASH : STASH_INVENTORY
 
 GuiControlGet, GoldCoinChkBox
 GuiControlGet, GoldBagChkBox
 allQueries := AnyGoldBagQuery GoldCoinQuery
 /* 
-if (searchCoords == stashSearchCoords) && GoldBagChkBox && !GoldCoinChkBox
+if (searchCoords == STASH_INVENTORY) && GoldBagChkBox && !GoldCoinChkBox
   emptyInvSlotsForBags := oGraphicSearch.search(EmptyItemSlotQuery, {x1: searchCoords.1, x2: searchCoords.3, y1: searchCoords.2, y2: searchCoords.4}).Count()
 MsgBox % emptyInvSlotsForBags
- */
+*/
 if (GoldBagChkBox && GoldCoinChkBox)
 {
   GraphicSearchAndClick(allQueries, searchCoords, "Right", true)
@@ -215,7 +224,7 @@ return
 ButtonEmptyInventory:
 CheckActiveWindow()
 SetMouseDelay 1
-i := inventorySearchCoords
+i := PLAYER_INVENTORY_STASH
 ;findText().PixelSearch(X, Y, i.1, i.2, i.3, i.4, ItemBlueBackgroundColor)
 Send {shift down}
 while (findText().PixelSearch(X, Y, i.1, i.2, i.3, i.4, ItemBlueBackgroundColor))
@@ -237,61 +246,61 @@ return
 ;-------------------------------------------------------------------------------------------------------------------------Tab 2 Buy & Setup
 ButtonSetupInventory:
 CheckActiveWindow()
-SetMouseDelay 5
-searchCoords := inventorySearchCoords
+SetMouseDelay 3
+searchCoords := PLAYER_INVENTORY_STASH
 GuiControlGet, GoldBagsUD
 GuiControlGet, HealPotsUD
 GuiControlGet, BandagesUD
 GuiControlGet, CheckStashChkBox
 GuiControlGet, CrossbowChkBox
 
-if CheckStashChkBox
+if GoldBagsUD != 0
 {
-  if GoldBagsUD != 0
-    StashCheck([TreasurerQuery, GOLD_BAG_COLLECTION.STASH_EMPTY_GOLD_BAG], GoldBagsUD)
-  if HealPotsUD != 0
-    StashOrBuy([AlchemistQuery, FullHealPotsQuery], HealPotsUD)
-  if BandagesUD != 0
-    StashOrBuy([SurgeonQuery, FullBandagesQuery], BandagesUD)
+  found := 0
+  if CheckStashChkBox
+    found := CheckStashForItem(GOLD_BAG_COLLECTION.STASH_EMPTY_GOLD_BAG, GoldBagsUD)
+  if (found < GoldBagsUD)
+    BuyObject(GOLD_BAG_COLLECTION.MERCHANT_EMPTY_GOLD_BAG, TreasurerQuery, (GoldBagsUD-found))
 }
-else
-{
-  if GoldBagsUD != 0
-    BuyObject(GoldBagsUD, TreasurerQuery, GOLD_BAG_COLECTION_MERCHANT_EMPTY_GOLD_BAG)
-  if HealPotsUD != 0
-    BuyObject(HealPotsUD, AlchemistQuery, FullHealPotsQuery)
-  if BandagesUD != 0
-    BuyObject(BandagesUD, SurgeonQuery, FullBandagesQuery)  
-}
+/* 
+if HealPotsUD != 0
+  StashOrBuy([AlchemistQuery, FullHealPotsQuery], HealPotsUD)
+if BandagesUD != 0
+  StashOrBuy([SurgeonQuery, FullBandagesQuery], BandagesUD)
+*/
 if CrossbowChkBox
 {
-  BuyObject(1, WoodsmanQuery, CrossbowQuery)
-  BuyObject(1, WoodsmanQuery, FullBoltsQuery)
+  BuyObject(CrossbowQuery, WoodsmanQuery, 1)
+  BuyObject(FullBoltsQuery, WoodsmanQuery, 1)
 }
-GraphicSearchAndClick(StashButtonQuery, topMenuBarCoords, false, "Left", 1)
+GraphicSearchAndClick(StashButtonQuery, TOP_MENU, false, "Left", 1)
+ToolTip Done
 return
 
 
 ButtonSellTreasures:
 CheckActiveWindow()
 SetMouseDelay 1
-GraphicSearchAndClick(MerchantsButtonQuery, topMenuBarCoords, "Left", false, 1)
-GraphicSearchAndClick(CollectorQuery, screenCoords, "Left", false, 1)
-;testObj := GraphicSearchAndClick(CollectiblesString, stashSearchCoords, "Left", false)
-;GraphicSearchAndClick(MobGarbageString, stashSearchCoords, "Left", false)
-searchCoords := merchantSellCoords
-query := StartOfInventoryQuery
+GraphicSearchAndClick(MerchantsButtonQuery, TOP_MENU, "Left", false, 1)
+GraphicSearchAndClick(CollectorQuery, WHOLE_SCREEN, "Left", false, 1)
+;testObj := GraphicSearchAndClick(CollectiblesString, STASH_INVENTORY, "Left", false)
+;GraphicSearchAndClick(MobGarbageString, STASH_INVENTORY, "Left", false)
+;searchCoords := PLAYER_INVENTORY_MERCHANT
+;query := StartOfInventoryQuery
 counter := 1
 ;testObj := oGraphicSearch.search(TestQuery, {x1: searchCoords.1, x2: searchCoords.3, y1: searchCoords.2, y2: searchCoords.4})
-testObj := oGraphicSearch.search(query, {x1: searchCoords.1, x2: searchCoords.3, y1: searchCoords.2, y2: searchCoords.4})
-X:=testObj.1.x
-Y:=testObj.1.y
-firstX := X, firstY := testObj.1.y
-Loop 55
+;testObj := oGraphicSearch.search(query, {x1: searchCoords.1, x2: searchCoords.3, y1: searchCoords.2, y2: searchCoords.4})
+;X:=testObj.1.x
+;Y:=testObj.1.y
+firstX := (PLAYER_INVENTORY_MERCHANT.1 + 25)
+firstY := (PLAYER_INVENTORY_MERCHANT.2 + 25)
+X:=firstX
+Y:=firstY
+Loop 50
 {
-  if ((Mod(A_Index, 11) = 1) && (A_Index != 1))
+  if ((Mod(A_Index, 10) = 1) && (A_Index != 1))
   {
-    offset := counter * 60
+    offset := counter * 50
     Y:=firstY+offset
     X:=firstX + 50
     counter++
@@ -302,7 +311,7 @@ Loop 55
   }
   Click, %X%, %Y%, Left
 }
-GraphicSearchAndClick(DealButtonQuery, screenCoords, "Right", false, 0) 
+GraphicSearchAndClick(DealButtonQuery, WHOLE_SCREEN, "Right", false, 0) 
 ToolTip done
 return
 
@@ -310,13 +319,15 @@ return
 ButtonMoveGoldTrade:
 CheckActiveWindow()
 SetMouseDelay 1
-GraphicSearchAndClick(FullGoldBagQuery, stashSearchCoords, Left, false, 25)
+GraphicSearchAndClick(FullGoldBagQuery, STASH_INVENTORY, Left, false, 25)
+ToolTip Done
 return
 
 ButtonCheckTradeItems:
 CheckActiveWindow()
 SetMouseDelay 1
 GraphicSearchAndClick(TradeCheckQuery, centerScreenCoords, Left, false, 25)
+ToolTip Done
 return
 
 ;GuiClose:ExitApp
@@ -329,21 +340,21 @@ CheckActiveWindow()
 SetMouseDelay 5
 t1 := A_TickCount
 MsgBox % colorsToIgnore
-GraphicSearchAndClick(StashButtonQuery, topMenuBarCoords, "Left", false, 1)
+GraphicSearchAndClick(StashButtonQuery, TOP_MENU, "Left", false, 1)
 Sleep 100
-amount := GraphicSearchAndClick(StashCollectiblesString, stashSearchCoords, "Right", true)
+amount := GraphicSearchAndClick(StashCollectiblesString, STASH_INVENTORY, "Right", true)
 MsgBox, 4096, Tip, % "Found :`t" Round(amount.MaxIndex())
 . "`n`nTime  :`t" (A_TickCount-t1) " ms"
 . "`n`nPos   :`t" X ", " Y
 . "`n`nResult:`t" (amount ? "Success !" : "Failed !")
 return
-;GraphicSearchAndClick(MobGarbageString, stashSearchCoords, "Left", false)
+;GraphicSearchAndClick(MobGarbageString, STASH_INVENTORY, "Left", false)
 
 ButtonTestInv:
 CheckActiveWindow()
-;searchCoords := inventorySearchCoords
-searchCoords := merchantSellCoords
-;searchCoords := screenCoords
+;searchCoords := PLAYER_INVENTORY_STASH
+searchCoords := PLAYER_INVENTORY_MERCHANT
+;searchCoords := WHOLE_SCREEN
 counter := 1
 SetMouseDelay 4
 ;query := StashCollectiblesCollection.RubyQuery
@@ -384,16 +395,16 @@ return
 
 ButtonTestAllTreasuresSearch:
 CheckActiveWindow()
-if !GraphicSearchAndClick(StashCollectiblesString, screenCoords, "Left", false, 50)
+if !GraphicSearchAndClick(StashCollectiblesString, WHOLE_SCREEN, "Left", false, 50)
   ToolTip No Search
-if !GraphicSearchAndClick(MobGarbageString, screenCoords, "Left", false, 50)
+if !GraphicSearchAndClick(MobGarbageString, WHOLE_SCREEN, "Left", false, 50)
   ToolTip No Search
 ToolTip done
 return
 
 for _, object in MerchantCollectiblesCollection
 {
-  GraphicSearchAndClick(object, merchantSellCoords)
+  GraphicSearchAndClick(object, PLAYER_INVENTORY_MERCHANT)
 }
 */
 /* 
@@ -405,7 +416,7 @@ CheckActiveWindow()
 GuiControlGet, VariantUD
 itemToTest := "\images\test.png"
 imageTestQuery := "|<>**50$38.00zzU000n4vU01kV2S00EwFZg073UltU1kQMAwQH360vhj0P6DSs13cDtc0806D+06022EU1k0UoG0q0CAU0Qk1t00262380MUk0M00M60y00w0zw80Fz80M077zyQ00Qk6Q003Y3A000Aki0001o600006000000k002"
-i := screenCoords
+i := WHOLE_SCREEN
 t1 := A_TickCount
 variant := VariantUD / 100
 amount := oGraphicSearch.scan(imageTestQuery, i.1,i.2,i.3,i.4, variant,variant)
@@ -421,8 +432,9 @@ CheckActiveWindow()
 GuiControlGet, VariantUD
 t1 := A_TickCount
 itemToTest := "\images\test.png"
-imageTestQuery := "|<>##" VariantUD colorsToIgnore A_ScriptDir itemToTest
-amount := GraphicSearchAndClick(imageTestQuery, screenCoords, "Left", false)
+;imageTestQuery := "|<>##" VariantUD colorsToIgnore A_ScriptDir itemToTest
+imageTestQuery := GOLD_BAG_COLLECTION.MERCHANT_EMPTY_GOLD_BAG
+amount := GraphicSearchAndClick(imageTestQuery, WHOLE_SCREEN, "Left", false)
 MsgBox, 4096, Tip, % "Found :`t" Round(amount.MaxIndex())
 . "`n`nTime  :`t" (A_TickCount-t1) " ms"
 . "`n`nPos   :`t" X ", " Y
@@ -434,7 +446,7 @@ CheckActiveWindow()
 GuiControlGet, VariantUD
 t1 := A_TickCount
 query := AnyGoldBagQuery
-amount := GraphicSearchAndClick(query, screenCoords, "Left", false)
+amount := GraphicSearchAndClick(query, WHOLE_SCREEN, "Left", false)
 MsgBox, 4096, Tip, % "Found :`t" Round(amount.MaxIndex())
 . "`n`nTime  :`t" (A_TickCount-t1) " ms"
 . "`n`nPos   :`t" X ", " Y

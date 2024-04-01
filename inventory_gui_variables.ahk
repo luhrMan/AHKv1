@@ -1,14 +1,23 @@
 ;-------------------------------------------------------------------------------------------------Coordinates
 
 ;X1 Y1 X2 Y2
-global screenCoords := [0, 0, A_ScreenWidth, A_ScreenHeight]
-global inventorySearchCoords := [915, 820, 1460, 1095]
-global stashSearchCoords := [1800, 265, A_ScreenWidth, 1345]
-global topMenuBarCoords := [A_ScreenWidth * 0.17, 0, A_ScreenWidth * 0.82, A_ScreenHeight * 0.9]
-global MerchantBuyCoords := [0, A_ScreenHeight * 0.20, A_ScreenWidth * 0.3, A_ScreenHeight]
-global merchantSellCoords := [1831, 834, 2477, 1114]
+global WHOLE_SCREEN := [0, 0, A_ScreenWidth, A_ScreenHeight]
+global PLAYER_INVENTORY_STASH := [915, 820, 1460, 1095]
+global STASH_INVENTORY := [1800, 265, A_ScreenWidth, 1345]
+global TOP_MENU := [A_ScreenWidth * 0.17, 0, A_ScreenWidth * 0.82, A_ScreenHeight * 0.9]
+global MERCHANT_INVENTORY := [0, A_ScreenHeight * 0.20, A_ScreenWidth * 0.3, A_ScreenHeight]
+global PLAYER_INVENTORY_MERCHANT := [1924, 839, 2474, 1111]
 global centerScreenCoords := [A_ScreenWidth * 0.4, A_ScreenHeight * 0.4, A_ScreenWidth * 0.6, A_ScreenHeight*0.6]
+global BOTTOM_HALF := [0, A_ScreenHeight * 0.5, A_ScreenWidth, A_ScreenHeight]
+global BUTTON_FILL_ALL_IN_STASH := {X:1276, Y:1232}
+global BUTTON_MAKE_DEAL := {X:1282, Y:1325}
+/* 
+global SCREEN_COORDINATES := {WHOLE_SCREEN : "[0, 0, A_ScreenWidth, A_ScreenHeight]"
+                            , STASH_INVENTORY : "[915, 820, 1460, 1095]"
+                            , FILL_AND_DEAL : "[1116, 1206, 1442, 1372]"
+                            , end:""}
 
+*/
 ;-------------------------------------------------------------------------------------------------Image to Text Queries
 ;-------------Gold
 global FullGoldBagQuery := "|<>*240$31.zzzzzzzzzzzzzzzzzzzzzzyzzzzzrzzzzxzzzzzTzzzzrzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzs7zzzzzzzzzzrrzzzvvzzTxxzzjSyzzzrTTzzvjjzzxrrzzyvvzzzRzzziTRzzyzvk"
@@ -61,11 +70,11 @@ for _, object in colorsToIgnoreCollection
     global colorsToIgnore .= object
     ;0x1c2a35-0x1c2b36-0x1d2b36-0x1d2c37$
 }
-global GOLD_BAG_COLLECTION := {STASH_ANY_GOLD_BAG := "|<>##0" colorsToIgnore A_ScriptDir "\images\STASH_ANY_GOLD_BAG.png"
-                            , STASH_EMPTY_GOLD_BAG := "|<>##0" colorsToIgnore A_ScriptDir "\images\STASH_EMPTY_GOLD_BAG.png"
-                            , STASH_FULL_GOLD_BAG := "|<>##0" colorsToIgnore A_ScriptDir "\images\STASH_FULL_GOLD_BAG.png"
-                            , MERCHANT_EMPTY_GOLD_BAG := "|<>##0" colorsToIgnore A_ScriptDir "\images\MERCHANT_ANY_GOLD_BAG.png"
-                            , ""}
+global GOLD_BAG_COLLECTION := {STASH_ANY_GOLD_BAG : "|<>##0" colorsToIgnore A_ScriptDir "\images\STASH_ANY_GOLD_BAG.png"
+                            , STASH_EMPTY_GOLD_BAG : "|<>##0" colorsToIgnore A_ScriptDir "\images\STASH_EMPTY_GOLD_BAG.png"
+                            , STASH_FULL_GOLD_BAG : "|<>##0" colorsToIgnore A_ScriptDir "\images\STASH_FULL_GOLD_BAG.png"
+                            , MERCHANT_EMPTY_GOLD_BAG : "|<>##0" colorsToIgnore A_ScriptDir "\images\MERCHANT_EMPTY_GOLD_BAG.png"
+                            , end:""}
 
 ;-------------Collectibles
 global  MerchantCollectiblesCollection := {DiamondQuery: "" ;------Singles

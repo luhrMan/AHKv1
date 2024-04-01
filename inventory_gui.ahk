@@ -78,8 +78,13 @@ Gui, Add, Button, gButtonCheckTradeItems, Check Trade Items
 
 Gui, Show
 return
-
+;------------------Hotkeys
 *ESC::ExitApp
+
+#IfWinActive ahk_exe DungeonCrawler.exe
++s:: ;shift + s
+;function that will sell an item the player has equipped that is currently under the mouse cursor
+
 
 CheckActiveWindow(){
   if (WinExist("Dark and Darker"))
@@ -283,15 +288,7 @@ CheckActiveWindow()
 SetMouseDelay 1
 GraphicSearchAndClick(MerchantsButtonQuery, TOP_MENU, "Left", false, 1)
 GraphicSearchAndClick(CollectorQuery, WHOLE_SCREEN, "Left", false, 1)
-;testObj := GraphicSearchAndClick(CollectiblesString, STASH_INVENTORY, "Left", false)
-;GraphicSearchAndClick(MobGarbageString, STASH_INVENTORY, "Left", false)
-;searchCoords := PLAYER_INVENTORY_MERCHANT
-;query := StartOfInventoryQuery
 counter := 1
-;testObj := oGraphicSearch.search(TestQuery, {x1: searchCoords.1, x2: searchCoords.3, y1: searchCoords.2, y2: searchCoords.4})
-;testObj := oGraphicSearch.search(query, {x1: searchCoords.1, x2: searchCoords.3, y1: searchCoords.2, y2: searchCoords.4})
-;X:=testObj.1.x
-;Y:=testObj.1.y
 firstX := (PLAYER_INVENTORY_MERCHANT.1 + 25)
 firstY := (PLAYER_INVENTORY_MERCHANT.2 + 25)
 X:=firstX

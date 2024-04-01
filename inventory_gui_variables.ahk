@@ -1,23 +1,19 @@
 ;-------------------------------------------------------------------------------------------------Coordinates
 
 ;X1 Y1 X2 Y2
-global WHOLE_SCREEN := [0, 0, A_ScreenWidth, A_ScreenHeight]
-global PLAYER_INVENTORY_STASH := [915, 820, 1460, 1095]
-global STASH_INVENTORY := [1800, 265, A_ScreenWidth, 1345]
-global TOP_MENU := [A_ScreenWidth * 0.17, 0, A_ScreenWidth * 0.82, A_ScreenHeight * 0.9]
-global MERCHANT_INVENTORY := [0, A_ScreenHeight * 0.20, A_ScreenWidth * 0.3, A_ScreenHeight]
-global PLAYER_INVENTORY_MERCHANT := [1924, 839, 2474, 1111]
-global centerScreenCoords := [A_ScreenWidth * 0.4, A_ScreenHeight * 0.4, A_ScreenWidth * 0.6, A_ScreenHeight*0.6]
-global BOTTOM_HALF := [0, A_ScreenHeight * 0.5, A_ScreenWidth, A_ScreenHeight]
 global BUTTON_FILL_ALL_IN_STASH := {X:1276, Y:1232}
 global BUTTON_MAKE_DEAL := {X:1282, Y:1325}
-/* 
-global SCREEN_COORDINATES := {WHOLE_SCREEN : "[0, 0, A_ScreenWidth, A_ScreenHeight]"
-                            , STASH_INVENTORY : "[915, 820, 1460, 1095]"
-                            , FILL_AND_DEAL : "[1116, 1206, 1442, 1372]"
-                            , end:""}
+global SCREEN_SEARCH_COORDINATES := {WHOLE_SCREEN: [0, 0, A_ScreenWidth, A_ScreenHeight]
+                                    , BOTTOM_HALF : [0, A_ScreenHeight * 0.5, A_ScreenWidth, A_ScreenHeight]
+                                    , CENTER : [A_ScreenWidth * 0.4, A_ScreenHeight * 0.4, A_ScreenWidth * 0.6, A_ScreenHeight*0.6]
+                                    , TOP_MENU : [A_ScreenWidth * 0.17, 0, A_ScreenWidth * 0.82, A_ScreenHeight * 0.9]
+                                    , STASH_INVENTORY: [1800, 265, A_ScreenWidth, 1345]         
+                                    , PLAYER_INVENTORY_STASH : [915, 820, 1460, 1095]
+                                    , MERCHANT_INVENTORY : [0, A_ScreenHeight * 0.20, A_ScreenWidth * 0.3, A_ScreenHeight]
+                                    , PLAYER_INVENTORY_MERCHANT : [1924, 839, 2474, 1111]
+                                    , FILL_AND_DEAL : [1116, 1206, 1442, 1372]
+                                    , "end":""}
 
-*/
 ;-------------------------------------------------------------------------------------------------Image to Text Queries
 ;-------------Gold
 global FullGoldBagQuery := "|<>*240$31.zzzzzzzzzzzzzzzzzzzzzzyzzzzzrzzzzxzzzzzTzzzzrzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzs7zzzzzzzzzzrrzzzvvzzTxxzzjSyzzzrTTzzvjjzzxrrzzyvvzzzRzzziTRzzyzvk"
@@ -32,6 +28,7 @@ global CrossbowQuery := ""
 global FullBoltsQuery := ""
 global StartOfInventoryQuery:= "|<>**20$39.000001c000005s00000jxk00051zzw00c1Q1k050S0C00c6U2M050g0f00cB0BM051M3C00c2U0k050E1m00c60+E053w2G00co0mE056U4W00co0Yk056UC600co1MU054k1A00jp03U056c6M00co1X005U"
 global ItemBlueBackgroundColor := "0x1c2b36"
+global PLAYER_INVENTORY_STASH_CORNER := "|<>##0$0/0/475561,1/1/4A5864,2/2/000F1B,1/2/000F1B,1/3/000F1B,0/3/4C5A65,0/2/4D5B66,1/0/4C5B66,2/0/43525D,2/1/42505B,2/4/091722,1/4/000F1B,0/4/46545F"
 global ItemRedBackgroundQuery := "|<>*37$11.zzzzw7kC0M0U10204080E"
 global EmptyItemSlotQuery := "|<>*26$51.zzzzzzzzrzzzzzzzyzzzzzzzzrzzzzzzzyzzzzzzzzrzzzzzzzyzzUbsk0zrzMLTi83yzs00000Drw000001yz100000Drs000001yz000000Dry000081yzU00000Dry000001yzn00000Drz000001yzs00000Drw000001yzm00000zryE0000Hyzk00000Dry800001yzk00000DrzM0A003yzx03U0ETryU0M003yzp060U0zrw000401yzk08000zry010007yzo08k02zry000007yzk0802Ezrz000007yzs00000zrz000003yzk00000Try000007yzk00040zrw0U0013yzUA01ulzry1s8zCzyzzzzzzzzrzzzzzzzyzzzzzzzzrzzzzzzzyzzzzzzzzrzzzzzzzy000000004"
 

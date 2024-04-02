@@ -229,7 +229,7 @@ return
 ButtonEmptyInventory:
 CheckActiveWindow()
 SetMouseDelay 1
-i := PLAYER_INVENTORY_STASH
+i := SCREEN_SEARCH_COORDINATES.PLAYER_INVENTORY_STASH
 Send {shift down}
 while (findText().PixelSearch(X, Y, i.1, i.2, i.3, i.4, ItemBlueBackgroundColor))
 {

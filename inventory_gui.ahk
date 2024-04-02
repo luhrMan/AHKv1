@@ -1,3 +1,4 @@
+SetWorkingDir %A_ScriptDir%
 #Include inventory_gui_variables.ahk
 ;#Include inventory_gui_util.ahk
 #Include findText.ahk

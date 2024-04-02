@@ -4,10 +4,10 @@ SetWorkingDir %A_ScriptDir%
 #Include findText.ahk
 #Include %A_ScriptDir%\node_modules
 #Include graphicsearch.ahk\export.ahk
-
 #SingleInstance Force
 SetMouseDelay 0
 oGraphicSearch := new graphicsearch()
+
 ;#Warn
 ;------------------------------------------------------------------------------------------------- GUI setup
 ; Create GUI
@@ -89,16 +89,16 @@ ExitApp
 #IfWinActive ahk_exe DungeonCrawler.exe
 !s Up:: ; alt + s
   SellEquippedItem(){
+    invX := SCREEN_SEARCH_COORDINATES.PLAYER_INVENTORY_MERCHANT.1 + 25
+    invY := SCREEN_SEARCH_COORDINATES.PLAYER_INVENTORY_MERCHANT.2 + 25
+    dealX := BUTTON_MAKE_DEAL.X
+    dealY := BUTTON_MAKE_DEAL.Y
     MouseGetPos, firstX, firstY
     Click, %firstX%, %firstY%, Right
     Sleep 100
-    X := SCREEN_SEARCH_COORDINATES.PLAYER_INVENTORY_MERCHANT.1 + 25
-    Y := SCREEN_SEARCH_COORDINATES.PLAYER_INVENTORY_MERCHANT.2 + 25
-    Click, %X%, %Y%, Left
+    Click, %invX%, %invY%, Left
     Sleep 200
-    X := BUTTON_MAKE_DEAL.X
-    Y := BUTTON_MAKE_DEAL.Y
-    Click, %X%, %Y%, Left
+    Click, %dealX%, %dealY%, Left
     MouseMove, %firstX%, %firstY%
     return
   }
@@ -112,123 +112,30 @@ CheckActiveWindow(){
   }
   return
 }
-/* 
-GraphicSearchAndClick(itemQuery, searchCoords, mouseBtn, shiftDown:=false, maxClicks:=50){
-  local resultObj := oGraphicSearch.search(itemQuery, {x1: searchCoords.1, x2: searchCoords.3, y1: searchCoords.2, y2: searchCoords.4})
-  if (maxClicks = 0)
-  {
-    MouseMove, resultObj.1.x, resultObj.1.y
-    return resultObj
-  }
-
-  if (resultObj) {
-    if shiftDown
-      Send {shift down}
-    for _, object in resultObj{
-      X := object.x, Y := object.y
-      Click, %X%, %Y%, %mouseBtn%
-      if (A_Index == maxClicks)
-      {
-        Send {shift up}
-        break
-      }
-    }
-    Send {shift up}
-    return resultObj
-  }
-  return
-}
-
-BuyObject(item, merchant, amount){
-  SetMouseDelay 2
-  GraphicSearchAndClick(MerchantsButtonQuery, SCREEN_SEARCH_COORDINATES.TOP_MENU, "Left", false)
-  Sleep 100
-  GraphicSearchAndClick(merchant, SCREEN_SEARCH_COORDINATES.WHOLE_SCREEN, "Left", false)
-  Sleep 100
-  GraphicSearchAndClick(item, SCREEN_SEARCH_COORDINATES.MERCHANT_INVENTORY, "Left", false)
-  Sleep 100
-  FillX:= BUTTON_FILL_ALL_IN_STASH.X, FillY:= BUTTON_FILL_ALL_IN_STASH.Y
-  DealX := BUTTON_MAKE_DEAL.X, DealY := BUTTON_MAKE_DEAL.Y
-  Loop %amount%
-  {
-    Click, %FillX%, %FillY%, Left
-    Sleep 100
-    Click, %DealX%, %DealY%, Left
-    Sleep 100
-  }
-  GraphicSearchAndClick(BackButtonQuery, SCREEN_SEARCH_COORDINATES.TOP_MENU, "Left", false)
-  return
-}
-
-CheckStashForItem(itemQuery, amount){
-  SetMouseDelay 3
-  GraphicSearchAndClick(StashButtonQuery, SCREEN_SEARCH_COORDINATES.TOP_MENU, "Left", false)
-  Sleep 100
-  foundObj := GraphicSearchAndClick(itemQuery, SCREEN_SEARCH_COORDINATES.STASH_INVENTORY, "Right", true, amount)
-
-  if !foundObj
-    return 0
-  else if (foundObj.Count() >= %amount%)
-    return %amount%
-  else
-    return (%amount%-foundObj.Count())
-  return
-}
-
-ClearNotifications(){
-  SetMouseDelay 5
-  GraphicSearchAndClick(MerchantsButtonQuery, SCREEN_SEARCH_COORDINATES.TOP_MENU, "Left", false, 1)
-  Loop
-  {
-    merchantNotificationsObj := GraphicSearchAndClick(MerchantNotificationQuery, SCREEN_SEARCH_COORDINATES.WHOLE_SCREEN, "Left", false, 0)
-  } 
-  Until merchantNotificationObj || A_Index = 5
-
-  for _, object in merchantNotificationObj{
-    X := object.x, Y := object.y
-    Click, %X%, %Y%, "Left"
-    Sleep 200
-    GraphicSearchAndClick(QuestsButtonQuery, SCREEN_SEARCH_COORDINATES.WHOLE_SCREEN, "Left", false)
-    questNotificationAmount := GraphicSearchAndClick(QuestNotificationQuery, SCREEN_SEARCH_COORDINATES.MERCHANT_INVENTORY, "Left", false, 0)
-  
-    for _, object in questNotificationAmount{
-      X := object.x, Y := object.y
-      Click, %X%, %Y%, "Left"
-      GraphicSearchAndClick(AcceptButtonQuery, SCREEN_SEARCH_COORDINATES.WHOLE_SCREEN, "Left", false, 1)
-    }
-    GraphicSearchAndClick(BackButtonQuery, topMenuBarCoord, "Left", false, 1)
-  }
-  return
-}
-*/
 ;BUTTONSBUTTONSBUTTONSBUTTONSBUTTONSBUTTONSBUTTONSBUTTONSBUTTONSBUTTONSBUTTONSBUTTONSBUTTONSBUTTONS
 ;BUTTONSBUTTONSBUTTONSBUTTONSBUTTONSBUTTONSBUTTONSBUTTONSBUTTONSBUTTONSBUTTONSBUTTONSBUTTONSBUTTONS------------Tab 1 Inven Management
 ButtonMoveGold:
 CheckActiveWindow()
 SetMouseDelay 1
-GuiControlGet, ImageRecognitionArea
-searchCoords := ImageRecognitionArea = "Inventory" ? SCREEN_SEARCH_COORDINATES.PLAYER_INVENTORY_STASH : SCREEN_SEARCH_COORDINATES.STASH_INVENTORY
-
 GuiControlGet, GoldCoinChkBox
 GuiControlGet, GoldBagChkBox
-allQueries := AnyGoldBagQuery GoldCoinQuery
+GuiControlGet, ImageRecognitionArea
+searchCoords := ImageRecognitionArea = "Inventory" ? SCREEN_SEARCH_COORDINATES.PLAYER_INVENTORY_STASH : SCREEN_SEARCH_COORDINATES.STASH_INVENTORY
+goldCoinQueries := GOLD_BAG_COLLECTION_IMAGES.GOLD_COIN GOLD_BAG_COLLECTION_IMAGES.GOLD_COINS
+allQueries := GOLD_BAG_COLLECTION_IMAGES.STASH_ANY_GOLD_BAG goldCoinQueries
+
 /* 
 if (searchCoords == SCREEN_SEARCH_COORDINATES.STASH_INVENTORY) && GoldBagChkBox && !GoldCoinChkBox
   emptyInvSlotsForBags := oGraphicSearch.search(EmptyItemSlotQuery, {x1: searchCoords.1, x2: searchCoords.3, y1: searchCoords.2, y2: searchCoords.4}).Count()
 MsgBox % emptyInvSlotsForBags
 */
 if (GoldBagChkBox && GoldCoinChkBox)
-{
   GraphicSearchAndClick(allQueries, searchCoords, "Right", true)
-}
 else if (GoldCoinChkBox)
-{
-  GraphicSearchAndClick(GoldCoinQuery, searchCoords, "Right", true)
-}
+  GraphicSearchAndClick(goldCoinQueries, searchCoords, "Right", true)
 else if (GoldBagChkBox)
-{
-  GraphicSearchAndClick(AnyGoldBagQuery, searchCoords, "Right", true)
-}
+  GraphicSearchAndClick(GOLD_BAG_COLLECTION_IMAGES.STASH_ANY_GOLD_BAG, searchCoords, "Right", true)
+
 ToolTip Done
 return
 
@@ -272,11 +179,25 @@ if GoldBagsUD != 0
   if (found < GoldBagsUD)
     BuyObject(GOLD_BAG_COLLECTION_IMAGES.MERCHANT_EMPTY_GOLD_BAG, TreasurerQuery, (GoldBagsUD-found))
 }
-/* 
+/*
+
+
 if HealPotsUD != 0
-  StashOrBuy([AlchemistQuery, FullHealPotsQuery], HealPotsUD)
+{
+  found := 0
+  if CheckStashChkBox
+    found := CheckStashForItem()
+  if (found < HealPotsUD)
+    BuyObject()
+}
 if BandagesUD != 0
-  StashOrBuy([SurgeonQuery, FullBandagesQuery], BandagesUD)
+{
+  found := 0
+  if CheckStashChkBox
+    found := CheckStashForItem()
+  if (found < BandagesUD)
+    BuyObject()
+}
 */
 if CrossbowChkBox
 {

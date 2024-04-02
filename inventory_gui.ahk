@@ -1,6 +1,6 @@
 SetWorkingDir %A_ScriptDir%
 #Include inventory_gui_variables.ahk
-;#Include inventory_gui_util.ahk
+#Include inventory_gui_util.ahk
 #Include findText.ahk
 #Include %A_ScriptDir%\node_modules
 #Include graphicsearch.ahk\export.ahk
@@ -80,7 +80,11 @@ Gui, Add, Button, gButtonCheckTradeItems, Check Trade Items
 Gui, Show
 return
 ;------------------------------------------------------------------------------------------------------Hotkeys
+
 *ESC::ExitApp
+GuiClose:
+GuiEscape:
+ExitApp
 
 #IfWinActive ahk_exe DungeonCrawler.exe
 !s Up:: ; alt + s
@@ -108,7 +112,7 @@ CheckActiveWindow(){
   }
   return
 }
-
+/* 
 GraphicSearchAndClick(itemQuery, searchCoords, mouseBtn, shiftDown:=false, maxClicks:=50){
   local resultObj := oGraphicSearch.search(itemQuery, {x1: searchCoords.1, x2: searchCoords.3, y1: searchCoords.2, y2: searchCoords.4})
   if (maxClicks = 0)
@@ -196,6 +200,7 @@ ClearNotifications(){
   }
   return
 }
+*/
 ;BUTTONSBUTTONSBUTTONSBUTTONSBUTTONSBUTTONSBUTTONSBUTTONSBUTTONSBUTTONSBUTTONSBUTTONSBUTTONSBUTTONS
 ;BUTTONSBUTTONSBUTTONSBUTTONSBUTTONSBUTTONSBUTTONSBUTTONSBUTTONSBUTTONSBUTTONSBUTTONSBUTTONSBUTTONS------------Tab 1 Inven Management
 ButtonMoveGold:

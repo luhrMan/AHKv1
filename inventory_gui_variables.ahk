@@ -3,6 +3,10 @@
 ;X1 Y1 X2 Y2
 global BUTTON_FILL_ALL_IN_STASH := {X:1276, Y:1232}
 global BUTTON_MAKE_DEAL := {X:1282, Y:1325}
+global BUTTON_COORDINATES := {FILL_ALL_IN_STASH : {X:1276, Y:1232}
+                            , MAKE_DEAL : {X:1282, Y:1325}
+                            , "end":""}
+
 global SCREEN_SEARCH_COORDINATES := {WHOLE_SCREEN: [0, 0, A_ScreenWidth, A_ScreenHeight]
                                     , BOTTOM_HALF : [0, A_ScreenHeight * 0.5, A_ScreenWidth, A_ScreenHeight]
                                     , CENTER : [A_ScreenWidth * 0.4, A_ScreenHeight * 0.4, A_ScreenWidth * 0.6, A_ScreenHeight*0.6]
@@ -55,14 +59,14 @@ global FillButtonQuery := "|<>*119$161.zznzzzzzzzzzzzzzzzzzzzzzzzy03bbbzUDzzzzDy
 global DealButtonQuery := "|<>*121$142.TzzzzzzbzzzzzzzzzzzzzzwwDzyDzzyDzzzzzlU7zzzzzzlsTzszzzwTzzzzzUE7zzzzzzXVzz3zzzlzzzzzyDwDzzzzzyC3zwDzzz7zzzzzszszzzzzzssDzUzzzwTzzzzzXzlzzzzzzXUTy3ztzlyDyzzyDz7zrzzDyC1zmDs1z7lz0TzszyDs3z0DssXz8z73wQDtszzXzszD7ssTXWDxXtyDlXzDlzyDzXtyDDlyCATaDbwT4TtzXzszyDDwQzXsslyMzTlw3zbwDzXzswzlvyDXXXnXzs7k7wS1zyDzXnkDz0yCCDCDwAT0Tk1zzszyC0DzVXsswNsz7lwMz1zzzXztsDzsyDXXlbXtz7llyTzzyDzbnzzDsyCDWyDbwT7XszzzszwT7zwzXssy3swTlwSDVzTzXzXwDvXyDXXwDXsw7lwT3nzyDwTsST7UyCDlyDU477sy0Dzs03zk1w0Us1zblzVtwzVw3zz01zzkTwDDnU"
 global BackButtonQuery := "|<>*61$160.01zzzzzzzzzz01zzzzzzzzzzzzy03zzzzzzzzzs0Dzzzzzzzzzzzzs0zzzzyDzzXzs0zzzzzzzzzzwTzVzk01z03zk0zz7zs01zzzzzzkzz7zU07s07w01zwTzk03zzzzzzXzwTz3wT7kTVy3zlzzVw7zzzzzyDzlzyDtsznwDwDz7zz7wTzzzzzszz7zszzXzDlzlzwTzwTkzzzzzzXzwTzXzy7xy7zjzlzzlz7zVzz3yDVlzyDzw7zsTzzz7zz7wTk1zk3swD7zszzk7zXzzzwTzwTVy07w47XVwTzU1zU7wDzzzlzzk0DlwDlwSADlzy07zUDkzzzz7zz00z7kyDvs1z7zs0zzUD3zzzwTzw01yzXszjUDwTzXzzzUQDzzzlzzlz3zUD3zy0zlzyDzzz1szzzz7zz7yDk0wTzs1z7zszzzy7VzzzwTzwTsyDXkzzV7wTzXzTjwS7zvzlzzlzXlyD3zyADlzyDxwzlwDzDz7zz7yC7syDzssT7ztzbXz7kTszwTzwTksT3sTbXlwTw00C1kzU07zlzy007VsDU0SD3lzk00s07z00zz7zs00z00D03sy77z003k0zz0DzwTzU07y1Xz0TXwATzzzzzzzzzzzlzzzzzzzzzzzzzk1zzzzzzzzzy07zzzzzzzzzzzzz07zzzzzzzzzw0Tzzzzzzzzzzzzy0zzzzzzzzzzs3zzzzzzzzzzzzzU"
 global TestQuery := "|<>##70x1c2b36-0x1d2b36-0x1e2c37-0x1d2c36-0x1d2c37-0x1b2934-0x1a2a35$0/0/F9F8F6,1/0/FCFBF8,2/0/F9F8F5,5/0/EBE9E6,4/1/8E8779,1/2/858077,-3/4/736F67,-3/2/757169,-4/2/262F36,-4/3/262F37,-4/4/1E2B36,-4/1/232E36,-3/-1/616B76,-1/-1/5E666F,-19/0/8B867E,-19/1/6C675F,-18/1/80796C,-18/2/464A4B,-18/0/A29F99,-17/1/3B4145,-19/-3/656F78,-20/-4/36434F,-10/1/1D2C37,-9/-1/1C2A35,-14/-2/1C2B36,-12/-7/1D2C37,-7/-11/B0B5BA,-12/-10/DFDCD7,-15/-10/DADAD3,-7/-10/85817B,-11/-12/303E49,-5/-12/3F4B55,-17/-13/1D2B36,-20/-6/716E67,-26/-5/182732"
-global colorsToIgnoreCollection := ["0x1a2833-"
+global COLORS_TO_IGNORE_COLLECTION := ["0x1a2833-"
                                 ;, "0x182732-"
                                 , "0x1c2a35-"
                                 , "0x1c2b36-"
                                 , "0x1d2b36-"
                                 , "0x1d2c37"
                                 , "$"]
-for _, object in colorsToIgnoreCollection
+for _, object in COLORS_TO_IGNORE_COLLECTION
 {
     global colorsToIgnore .= object
     ;0x1c2a35-0x1c2b36-0x1d2b36-0x1d2c37$

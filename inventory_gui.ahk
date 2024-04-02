@@ -286,6 +286,7 @@ ButtonSellTreasures:
 CheckActiveWindow()
 SetMouseDelay 1
 GraphicSearchAndClick(MerchantsButtonQuery, SCREEN_SEARCH_COORDINATES.TOP_MENU, "Left", false, 1)
+sleep 100
 GraphicSearchAndClick(CollectorQuery, SCREEN_SEARCH_COORDINATES.WHOLE_SCREEN, "Left", false, 1)
 counter := 1
 firstX := (SCREEN_SEARCH_COORDINATES.PLAYER_INVENTORY_MERCHANT.1 + 25)

@@ -1,1 +1,1 @@
-Tool for market auto buying/selling.
+Tool for auto buying/selling in the market.
